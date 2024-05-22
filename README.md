@@ -4,6 +4,7 @@ space to hook
 *Avoid the monsters line of sight
 *collect fish to improve your score
 
+TO PLAY THE GAME GO INTO PLAYfishingGame and click on the .exe file
 TO CLOSE THE GAME USE THE KEYS ALT + F4
 
 ## Credits
