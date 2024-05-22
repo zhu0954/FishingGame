@@ -15234,8 +15234,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movement: {fileID: 863330907}
-  hookSpeed: 10
-  ascentSpeed: 15
+  hookSpeed: 15
+  ascentSpeed: 20
 --- !u!114 &1954679968
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15248,9 +15248,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d384a058361041242827495664045f4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fishingRodTip: {fileID: 863330903}
-  hook: {fileID: 1954679959}
-  lineRenderer: {fileID: 0}
 --- !u!1001 &1964456174
 PrefabInstance:
   m_ObjectHideFlags: 0

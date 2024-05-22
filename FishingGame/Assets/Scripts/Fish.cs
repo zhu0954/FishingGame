@@ -10,9 +10,6 @@ public class Fish : MonoBehaviour
     private float botSpeed = 5f;
     public int scoreValue = 10; // Points given for collecting this fish
 
-
-
-
     void Start()
     {
         speed = Random.Range(topSpeed, botSpeed);
@@ -24,7 +21,6 @@ public class Fish : MonoBehaviour
         {
             transform.Translate(Vector2.left * speed * Time.deltaTime, Space.Self);
         }
-
     }
 
     private void OnTriggerStay2D(Collider2D collision)
@@ -34,7 +30,6 @@ public class Fish : MonoBehaviour
             caught = true;
             transform.position = collision.transform.position;
             speed = 0;
-
         }
         else
         {
@@ -48,17 +43,12 @@ public class Fish : MonoBehaviour
         {
             Destroy(this.gameObject);
             CollectFish();
-
         }
         if (collision.CompareTag("Player"))
         {
             CollectFish();
         }
-
-
     }
-
-   
 
     void CollectFish()
     {
@@ -66,5 +56,4 @@ public class Fish : MonoBehaviour
         ScoreManager.instance.AddScore(scoreValue);
         Destroy(gameObject);
     }
-
 }

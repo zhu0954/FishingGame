@@ -1,19 +1,16 @@
 using System.Collections;
-using System.Collections.Generic;
-using System.Net.Sockets;
-using System.Text;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 public class Hook : MonoBehaviour
 {
-   private enum HookState
+    private enum HookState
     {
         Idle,
         Hooking,
         Reeling,
     }
+
     private bool floorHit;
     private bool boatHit;
     private bool fishHit;
@@ -24,9 +21,11 @@ public class Hook : MonoBehaviour
     private PlayerActions actions;
     private InputAction hookAction;
 
-    [Range(0, 10)][SerializeField] private float hookSpeed = 10f;
+    [Range(0, 20)][SerializeField] private float hookSpeed = 15f;
     private float speed;
-    [SerializeField] private float ascentSpeed = 10f;
+    [SerializeField] private float ascentSpeed = 20f;
+
+    private GameObject hookedFish;
 
     void Awake()
     {
@@ -51,12 +50,12 @@ public class Hook : MonoBehaviour
 
     void Update()
     {
-        switch (hookState) 
-        { 
+        switch (hookState)
+        {
             case HookState.Idle:
                 movement.canMove = true;
                 speed = 0;
-                if(hookAction.ReadValue<float>() > 0)
+                if (hookAction.ReadValue<float>() > 0)
                 {
                     hookState = HookState.Hooking;
                     speed = hookSpeed;
@@ -64,8 +63,7 @@ public class Hook : MonoBehaviour
                 break;
             case HookState.Hooking:
                 movement.canMove = false;
-
-                if(floorHit)
+                if (floorHit)
                 {
                     hookState = HookState.Reeling;
                 }
@@ -74,7 +72,7 @@ public class Hook : MonoBehaviour
                     transform.Translate(Vector2.down * speed * Time.deltaTime, Space.Self);
                 }
 
-                if(fishHit)
+                if (fishHit)
                 {
                     hookState = HookState.Reeling;
                 }
@@ -82,13 +80,19 @@ public class Hook : MonoBehaviour
                 {
                     transform.Translate(Vector2.down * speed * Time.deltaTime, Space.Self);
                 }
-                
+
                 break;
-           case HookState.Reeling:
-                transform.Translate(Vector2.up * ascentSpeed * Time.deltaTime, Space.Self);  
+            case HookState.Reeling:
+                transform.Translate(Vector2.up * ascentSpeed * Time.deltaTime, Space.Self);
                 if (boatHit)
                 {
                     hookState = HookState.Idle;
+                    if (hookedFish != null)
+                    {
+                        ScoreManager.instance.AddScore(hookedFish.GetComponent<Fish>().scoreValue);
+                        Destroy(hookedFish);
+                        hookedFish = null;
+                    }
                 }
                 break;
         }
@@ -99,14 +103,11 @@ public class Hook : MonoBehaviour
         if (collision.gameObject.CompareTag("Floor") || collision.gameObject.CompareTag("Boundary"))
         {
             floorHit = true;
-            
         }
         else
         {
             floorHit = false;
         }
-
-        
     }
 
     void OnCollisionExit2D(Collision2D collision)
@@ -124,6 +125,7 @@ public class Hook : MonoBehaviour
         if (collision.gameObject.CompareTag("Fish"))
         {
             fishHit = true;
+            hookedFish = collision.gameObject;
         }
         else
         {

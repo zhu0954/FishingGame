@@ -22,10 +22,12 @@ public class Monster : MonoBehaviour
     private float strikeTimer = 0f;
     private bool Descending = false;
     private bool direction;
+    private Quaternion originalRotation;
 
     void Start()
     {
         sprite = GetComponent<SpriteRenderer>();
+        originalRotation = transform.rotation;
     }
 
     void Update()
@@ -82,11 +84,15 @@ public class Monster : MonoBehaviour
         {
             isPlayerInSight = true;
             SeesTarget();
+
+            float angle = Mathf.Atan2(directionToPlayer.y, directionToPlayer.x) * Mathf.Rad2Deg - 90f;
+            transform.rotation = Quaternion.Euler(0, 0, angle);
         }
         else
         {
             isPlayerInSight = false;
-            CantSeeTarget();        
+            CantSeeTarget();
+            transform.rotation = originalRotation;
         }
     }
 
@@ -106,6 +112,8 @@ public class Monster : MonoBehaviour
     {
         Vector2 strikeLocation = target.position - transform.position;
         transform.Translate(strikeLocation * strikeSpeed * Time.deltaTime, Space.Self);
+        float angle = Mathf.Atan2(strikeLocation.y, strikeLocation.x) * Mathf.Rad2Deg - 90f;
+        transform.rotation = Quaternion.Euler(0, 0, angle);
 
     }
 
@@ -151,6 +159,7 @@ public class Monster : MonoBehaviour
             isPlayerInSight = false; 
             patrol();
             strikeTimer = 0f;
+            transform.rotation = originalRotation;
         }
     }
 }

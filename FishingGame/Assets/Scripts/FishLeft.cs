@@ -8,16 +8,16 @@ public class FishLeft : MonoBehaviour
     private bool caught;
     private float topSpeed = 10f;
     private float botSpeed = 5f;
+    public int scoreValue = 10; // Points given for collecting this fish
 
     void Start()
     {
         speed = Random.Range(botSpeed, topSpeed);
     }
 
-    // Update is called once per frame
     void Update()
     {
-        if(!caught)
+        if (!caught)
         {
             transform.Translate(Vector2.right * speed * Time.deltaTime, Space.Self);
         }
@@ -42,6 +42,14 @@ public class FishLeft : MonoBehaviour
         if (collision.gameObject.CompareTag("Boat"))
         {
             Destroy(this.gameObject);
+            CollectFish();
         }
+    }
+
+    void CollectFish()
+    {
+        // Add score
+        ScoreManager.instance.AddScore(scoreValue);
+        Destroy(gameObject);
     }
 }
